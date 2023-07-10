@@ -25,12 +25,13 @@ dag = DAG(
 )
 
 data_fetch= PythonOperator(
-    task_id='data_Scrapping'
-    python_callable= run_fred_scrapper
-    dag=dag
+    task_id='dataScrapping',
+    python_callable= run_fred_scrapper,
+    dag=dag,
 )
 data_processing= PythonOperator(
-    task_id='data_processing'
-    python_callable= run_fred_scrapper
-    dag=dag
+    task_id='dataProcessing',
+    python_callable= run_fred_processor,
+    dag=dag,
 )
+data_fetch >> data_processing
