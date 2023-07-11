@@ -1,5 +1,5 @@
-from fred_scrapper import run_fred_scrapper
-from EDAv2 import run_fred_processor
+from fredScrapper import runFredScrapper
+from EDAv2 import runFredProcessor
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
