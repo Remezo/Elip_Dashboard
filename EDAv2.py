@@ -21,16 +21,15 @@ def process_data(frequency, data, window_size, period):
             data_frames[frequency][data]= data_frames[frequency][data].astype(float).rolling(int(window_size)).mean()
         elif period and period!=0:
             data_frames[frequency][data]= data_frames[frequency][data].astype(float).pct_change(periods=int(period), fill_method='ffill')
-            if data=='CPIAUCSL':
-                print(data_frames[frequency])
-                print()     
+ 
  
     except Exception as e:
         print(f"An error occurred for index {data}: {e}")
     
  
 def run_fred_processor():
-    file_path_scrapper = "fred_scrapper_output.xlsx"  # Replace with your actual file path
+    # file_path_scrapper = "fred_scrapper_output.xlsx"
+    file_path_scrapper=  "fred_scrapper_output.xlsx"
 
   
 
@@ -79,7 +78,8 @@ def run_fred_processor():
     data_frames["Monthly"].to_excel(writer, sheet_name="Monthly")
     data_frames["Quarterly"].to_excel(writer, sheet_name="Quarterly")
 
-    writer.save()
+    writer.close()
+    print("Data saved and Processed")
 
 
 if __name__ == "__main__":
