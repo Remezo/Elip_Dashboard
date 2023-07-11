@@ -38,6 +38,8 @@ def pull_data(data):
 	q = []
 	d = []
 	y = []
+
+	
 	for i, row in data.iterrows():
 		if (row.Frequency == "Monthly"):
 			m.append(row.Data)
@@ -47,6 +49,7 @@ def pull_data(data):
 			q.append(row.Data)
 		else:
 			y.append(row.Data)
+	
 
 	monthly = pd.DataFrame(columns=np.insert(m, 0, "Dates"))
 	monthly["Dates"] = pd.date_range(start="01/01/1940", end=pd.to_datetime("today"), freq="MS").date
@@ -145,8 +148,9 @@ def pull_data(data):
 
 def run_fred_scrapper():
 
-	xls = pd.ExcelFile("DataSummary.xlsx")
-	data = pd.read_excel(xls, "Sheet1", usecols="B:F").dropna()
+	# xls = pd.ExcelFile("DataSummary.xlsx")
+	# data = pd.read_excel(xls, "Sheet1", usecols="B:F").dropna()
+	data= pd.read_csv("DataSummary.csv")
 	# print(data)
 
 	daily, monthly, quarterly, count = pull_data(data)
@@ -154,6 +158,7 @@ def run_fred_scrapper():
 	#date = datetime.now().strftime("%Y_%m_%d_%M")
 	
 	
+	# file_path="fred_scrapper_output.xlsx"
 	file_path="fred_scrapper_output.xlsx"
 	
 
@@ -167,7 +172,7 @@ def run_fred_scrapper():
 
 	print("%d fields populated in output file, '%s'" % (count, file_path))
 	# excel_to_sql('fred_scrapper_output.xlsx')
-	print("Successfully added to the database")
+	# print("Successfully added to the database")
 
 
 if __name__ == '__main__':
