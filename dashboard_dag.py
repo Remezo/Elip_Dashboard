@@ -1,5 +1,5 @@
-from fredScrapper import runFredScrapper
-from EDAv2 import runFredProcessor
+from fredScrapper import run_fred_scrapper
+from EDAv2 import run_fred_processor
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
@@ -25,13 +25,14 @@ dag = DAG(
 )
 
 data_fetch= PythonOperator(
-    task_id='dataScrapping',
+    task_id='data_Scrapping',
     python_callable= run_fred_scrapper,
     dag=dag,
 )
 data_processing= PythonOperator(
-    task_id='dataProcessing',
+    task_id='data_processing',
     python_callable= run_fred_processor,
     dag=dag,
 )
-data_fetch >> data_processing
+
+data_fetch>> data_processing
