@@ -1,14 +1,14 @@
 import requests
 import json
 import pandas as pd
-import pythonScripts.config
+import pythonScripts.config as config
 from IPython.display import JSON
 import time
 from openpyxl import load_workbook
 import traceback
 from datetime import datetime
 from sqlalchemy import create_engine
-from sqlalchemy.pool import NullPool 
+from sqlalchemy.pool import NullPool
 
 
 def make_api_request(series_id):
