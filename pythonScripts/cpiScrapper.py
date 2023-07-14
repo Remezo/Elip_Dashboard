@@ -151,7 +151,7 @@ def excel_to_sql(excel_file):
 
 
 
-def main():
+def run_cpi_scrapper():
     # Make API request
     series_df=pd.read_csv(config.CPI_ItemCodes)
     series_id=list(series_df['serie_id'])
@@ -198,4 +198,4 @@ def main():
 
 # Execute the main function
 if __name__ == "__main__":
-    main()
+    run_cpi_scrapper()

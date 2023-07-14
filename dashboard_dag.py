@@ -1,9 +1,11 @@
-from fredScrapper import run_fred_scrapper
-from EDAv2 import run_fred_processor
+from pythonScripts.fredScrapper import run_fred_scrapper
+from pythonScripts.fredProcessor import run_fred_processor
+from pythonScripts.cpiScrapper import run_cpi_scrapper
 from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 from datetime import datetime, timedelta
+
 
 
 default_args = {
@@ -26,7 +28,7 @@ dag = DAG(
 
 CPIdata_fetch=PythonOperator(
     task_id='CPI_Scrapping',
-    python_callable= run_fred_scrapper,
+    python_callable= run_cpi_scrapper,
     dag=dag,
 )
 
