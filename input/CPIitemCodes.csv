@@ -1,0 +1,9 @@
+﻿serie_id,Item_Code,Item_Name,Relative_Importance
+CUUR0000SAH,SAH,Housing,42.668
+CUUR0000SAF,SAF,Food and beverages,15.778
+CUUR0000SAT,SAT,Transportation,18.164
+CUUR0000SAE,SAE,Education and Communication,5.792
+CUUR0000SAR,SAR,Recreation,4.735
+CUUR0000SAM,SAM,Medical Care,7.067
+CUUR0000SAG,SAG,Other goods and Services,2.82
+CUUR0000SA0,SA0,All items,100

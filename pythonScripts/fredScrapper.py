@@ -12,8 +12,8 @@ from pyquery import PyQuery as pq
 import math
 import sys
 from datetime import datetime
-# from sqlalchemy import create_engine
-# from sqlalchemy.pool import NullPool 
+from sqlalchemy import create_engine
+from sqlalchemy.pool import NullPool 
 # import pymysql
 # pymysql.install_as_MySQLdb()
 
@@ -131,18 +131,22 @@ def pull_data(data):
 
 	return daily, monthly, quarterly, count
 
-# def excel_to_sql(excel_file):
-# 	fred_sheets = pd.read_excel( excel_file, sheet_name = None) # read all sheets
-# 	# print(fred_sheets.keys())
+def excel_to_sql(excel_file):
 
-# 	engine = create_engine('mysql://admin:Ascentris123@database-1.cyoglzeje94r.us-east-1.rds.amazonaws.com/Ascentris_database', poolclass=NullPool)
+	fred_sheets = pd.read_excel( excel_file, sheet_name = None) # read all sheets
+	# print(fred_sheets.keys())
+	engine = create_engine('mysql://admin:Ascentris2023@database-1.cyoglzeje94r.us-east-1.rds.amazonaws.com/Ascentris_database', poolclass=NullPool )
+
+	print(fred_sheets.keys())
+
+	for table_name in fred_sheets.keys():
+		fred_sheets[table_name].to_sql(f"raw_{table_name}", if_exists="replace", con=engine)
 	
-# 	for table_name in fred_sheets.keys():
-#     		fred_sheets[table_name].to_sql(table_name, if_exists='replace', con=engine)
+	engine.dispose()		
 	
-# 	engine.dispose()		
+
 	
-	
+			
 
 
 
@@ -150,7 +154,7 @@ def run_fred_scrapper():
 
 	# xls = pd.ExcelFile("DataSummary.xlsx")
 	# data = pd.read_excel(xls, "Sheet1", usecols="B:F").dropna()
-	data= pd.read_csv("DataSummary.csv")
+	data= pd.read_csv("input/DataSummary.csv")
 	# print(data)
 
 	daily, monthly, quarterly, count = pull_data(data)
@@ -159,9 +163,9 @@ def run_fred_scrapper():
 	
 	
 	# file_path="fred_scrapper_output.xlsx"
-	file_path="fred_scrapper_output.xlsx"
+	file_path="output/fred_scrapper_output.xlsx"
 	
-
+	
 
 
 
@@ -171,8 +175,8 @@ def run_fred_scrapper():
 		quarterly.to_excel(writer, sheet_name="Quarterly")
 
 	print("%d fields populated in output file, '%s'" % (count, file_path))
-	# excel_to_sql('fred_scrapper_output.xlsx')
-	# print("Successfully added to the database")
+	excel_to_sql('output/fred_scrapper_output.xlsx')
+	print("Successfully added to the database")
 
 
 if __name__ == '__main__':

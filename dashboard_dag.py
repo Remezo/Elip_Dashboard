@@ -10,7 +10,7 @@ default_args = {
     'owner': 'Ascentris',
     'depends_on_past': False,
     'start_date': datetime(2023, 6, 7),
-    'email': ['airflow@example.com'],
+    'email': ['mike.remezo@ascentris.com'],
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
@@ -20,19 +20,25 @@ default_args = {
 dag = DAG(
     'fred_dag',
     default_args=default_args,
-    description='Our first DAG with ETL process!',
+    description='Ascentris Dashboard',
     schedule_interval=timedelta(days=1),
 )
 
-data_fetch= PythonOperator(
-    task_id='data_Scrapping',
+CPIdata_fetch=PythonOperator(
+    task_id='CPI_Scrapping',
+    python_callable= run_fred_scrapper,
+    dag=dag,
+)
+
+Freddata_fetch= PythonOperator(
+    task_id='fred_Scrapping',
     python_callable= run_fred_scrapper,
     dag=dag,
 )
 data_processing= PythonOperator(
-    task_id='data_processing',
+    task_id='fred_processing',
     python_callable= run_fred_processor,
     dag=dag,
 )
 
-data_fetch>> data_processing
+CPIdata_fetch>> Freddata_fetch >> data_processing

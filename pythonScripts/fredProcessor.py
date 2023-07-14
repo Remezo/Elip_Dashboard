@@ -2,6 +2,9 @@ import pandas as pd
 import numpy as np
 import openpyxl
 import xlsxwriter
+from datetime import datetime
+from sqlalchemy import create_engine
+from sqlalchemy.pool import NullPool 
 
 
 data_frames = {}
@@ -25,11 +28,26 @@ def process_data(frequency, data, window_size, period):
  
     except Exception as e:
         print(f"An error occurred for index {data}: {e}")
+
+
+
+def excel_to_sql(excel_file):
+    fred_sheets = pd.read_excel( excel_file, sheet_name = None)
+    fred_sheets['Quarterly'].replace([np.inf, -np.inf], 0, inplace=True)
+    engine = create_engine('mysql://admin:Ascentris2023@database-1.cyoglzeje94r.us-east-1.rds.amazonaws.com/Ascentris_database', poolclass=NullPool )
+
+
+    for table_name in fred_sheets.keys():
+        fred_sheets[table_name].to_sql(table_name, if_exists="replace", con=engine)
+    engine.dispose()
+
+    
+     	
     
  
 def run_fred_processor():
     # file_path_scrapper = "fred_scrapper_output.xlsx"
-    file_path_scrapper=  "fred_scrapper_output.xlsx"
+    file_path_scrapper=  "output/fred_scrapper_output.xlsx"
 
   
 
@@ -37,7 +55,7 @@ def run_fred_processor():
     data_frames["Monthly"] = pd.read_excel(file_path_scrapper, sheet_name="Monthly", index_col=False)  # Replace with your actual Monthly data
     data_frames["Quarterly"] = pd.read_excel(file_path_scrapper, sheet_name="Quarterly", index_col=False)  # Replace with your actual Quarterly data
 
-    data_summary = read_data_summary("DataSummary.csv")
+    data_summary = read_data_summary("output/DataSummary.csv")
     # print(data_summary)
 
 
@@ -49,7 +67,7 @@ def run_fred_processor():
     # test1.to_csv("test1.csv")
     
 
-    writer = pd.ExcelWriter("processed_data.xlsx", engine="xlsxwriter")
+    writer = pd.ExcelWriter("output/processed_data.xlsx", engine="xlsxwriter")
 
 
     # frequency="Monthly"
@@ -61,25 +79,29 @@ def run_fred_processor():
 
     for index, row in data_summary.iterrows():
 
+        
+
         data = row['Data']
         window_size = row['Window_Size']
         period = row['Period']
         frequency = row['Frequency']
       
         process_data(frequency, data, window_size , period)
+        print(f"Processing {data} variable")
 
       
 
-      
-
-
+    
     # Save each DataFrame separately
     data_frames["Daily"].to_excel(writer, sheet_name="Daily")
     data_frames["Monthly"].to_excel(writer, sheet_name="Monthly")
     data_frames["Quarterly"].to_excel(writer, sheet_name="Quarterly")
 
     writer.close()
-    print("Data saved and Processed")
+    
+    excel_to_sql('output/processed_data.xlsx')
+    print("Successfully added processed data to the database")
+
 
 
 if __name__ == "__main__":
