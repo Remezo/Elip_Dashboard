@@ -55,7 +55,7 @@ def run_fred_processor():
     data_frames["Monthly"] = pd.read_excel(file_path_scrapper, sheet_name="Monthly", index_col=False)  # Replace with your actual Monthly data
     data_frames["Quarterly"] = pd.read_excel(file_path_scrapper, sheet_name="Quarterly", index_col=False)  # Replace with your actual Quarterly data
 
-    data_summary = read_data_summary("output/DataSummary.csv")
+    data_summary = read_data_summary("input/DataSummary.csv")
     # print(data_summary)
 
 
