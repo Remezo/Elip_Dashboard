@@ -1,7 +1,7 @@
 import requests
 import json
 import pandas as pd
-import config
+import pythonScripts.config
 from IPython.display import JSON
 import time
 from openpyxl import load_workbook
