@@ -12,6 +12,8 @@ import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from plotly.subplots import make_subplots
+from io import BytesIO
+
 
 # @st.cache_data(ttl=24*60*60)
 # def read_data():
@@ -77,7 +79,7 @@ def main():
 
     # Display the selected page
     if selected_page == "CPI":
-        render_cpi_page(CPI)
+        render_cpi_page(CPI, processed_data_frames)
     elif selected_page == "Signs of Excess":
         render_signs_of_excess_page(df3, processed_data_frames, fred_data_frames)
     elif selected_page == "Operating Fundamentals":
@@ -112,12 +114,7 @@ def plot_graphs(filtered_df, processed_data_frames, fred_data_frames):
                 fig.add_trace(
                         go.Scatter(x=fred_data_frames[frequency]["Dates"], y=fred_data_frames[frequency][data], name=f"{data}"),secondary_y=False)
         
-        
 
-        
-        # fig.add_trace(
-        #         go.Scatter(x=fred_data_frames['Monthly']["Dates"], y=fred_data_frames[frequency][data], name=f"{data}"),secondary_y=True)
-        
        
         
         #Set title
@@ -132,7 +129,7 @@ def plot_graphs(filtered_df, processed_data_frames, fred_data_frames):
                 print(index)
 
 
-def render_cpi_page(df):
+def render_cpi_page(df,processed_data_frames):
     st.title("CPI Page")
     categories = df.columns[2:-1]
 
@@ -141,7 +138,7 @@ def render_cpi_page(df):
     for i, category in enumerate(categories):
         bar_trace_data.append(go.Bar(x=df['Unnamed: 0'], y=df[category], name=category))
 
-    line_trace = go.Scatter(x=df['Unnamed: 0'], y=df['All items'], name='All items', mode='lines+markers', line=dict(color='black'))
+    line_trace = go.Scatter(x=df['Unnamed: 0'], y=df['All items'], name='All items', mode='lines+markers', line=dict(color='red'))
     trace_data = bar_trace_data + [line_trace]
     layout = go.Layout(barmode='stack', title='CPI Componets', xaxis=dict(title='Years'), yaxis=dict(title='Weighted CPI'))
     fig = go.Figure(data=trace_data, layout=layout)
@@ -150,8 +147,26 @@ def render_cpi_page(df):
     for i, category in enumerate(categories):
         fig.add_trace(go.Scatter(x=[None], y=[None], mode='markers', showlegend=False, name=category))
     st.plotly_chart(fig, height=800, width=800)
-    # Add content for the CPI page here
 
+    st.markdown('## Download Data')
+    
+
+
+    excel_data = BytesIO()
+    with pd.ExcelWriter(excel_data, engine='xlsxwriter') as writer:
+        df.to_excel(writer, index=False, sheet_name='CPI_weighted')
+        processed_data_frames['Daily'].to_excel(writer, index=False, sheet_name='Daily')
+        processed_data_frames['Monthly'].to_excel(writer, index=False, sheet_name='Monthly')
+        processed_data_frames['Quarterly'].to_excel(writer, index=False, sheet_name='Quarterly')
+
+    excel_data.seek(0)
+    st.download_button(
+        label='Download Excel',
+        data=excel_data,
+        file_name='scrapped_data.xlsx',
+        mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        )
+    # Add content for the CPI page here
 def render_signs_of_excess_page(df3, processed_data_frames, fred_data_frames):
     st.title("Signs of Excess Page")
     filtered_df = df3[df3['Sector'] == 'Signs of Excess']
