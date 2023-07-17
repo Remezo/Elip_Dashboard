@@ -37,7 +37,7 @@ from plotly.subplots import make_subplots
 
 @st.cache_data(ttl=24*60*60)
 def retrieveData():
-    df3=pd.read_csv("DataSummary.csv")
+    df3=pd.read_csv("input/DataSummary.csv")
     db_connection_str = 'mysql://admin:Ascentris2023@database-1.cyoglzeje94r.us-east-1.rds.amazonaws.com/Ascentris_database'
     db_connection = create_engine(db_connection_str , pool_pre_ping=True)
 
