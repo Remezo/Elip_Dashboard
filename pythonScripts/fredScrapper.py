@@ -154,7 +154,7 @@ def run_fred_scrapper():
 
 	# xls = pd.ExcelFile("DataSummary.xlsx")
 	# data = pd.read_excel(xls, "Sheet1", usecols="B:F").dropna()
-	data= pd.read_csv("input/DataSummary.csv")
+	data= pd.read_csv("/home/ubuntu/airflow/Elip_Dashboard/input/DataSummary.csv")
 	# print(data)
 
 	daily, monthly, quarterly, count = pull_data(data)
@@ -163,7 +163,7 @@ def run_fred_scrapper():
 	
 	
 	# file_path="fred_scrapper_output.xlsx"
-	file_path="output/fred_scrapper_output.xlsx"
+	file_path="/home/ubuntu/airflow/Elip_Dashboard/output/fred_scrapper_output.xlsx"
 	
 	
 
@@ -175,7 +175,7 @@ def run_fred_scrapper():
 		quarterly.to_excel(writer, sheet_name="Quarterly")
 
 	print("%d fields populated in output file, '%s'" % (count, file_path))
-	excel_to_sql('output/fred_scrapper_output.xlsx')
+	excel_to_sql('/home/ubuntu/airflow/Elip_Dashboard/output/fred_scrapper_output.xlsx')
 	print("Successfully added to the database")
 
 

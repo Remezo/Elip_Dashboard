@@ -80,7 +80,7 @@ def calculate_percent_change():
     - A Pandas DataFrame containing the percent change values.
     """
     # Load the DataFrame from the Excel file
-    df = pd.read_excel('output/CPI_Data.xlsx', sheet_name='Processed', index_col=0)
+    df = pd.read_excel('/home/ubuntu/airflow/Elip_Dashboard/output/CPI_Data.xlsx', sheet_name='Processed', index_col=0)
 
     # Calculate percent change for each column (item) going back one year
     for column in df.columns:
@@ -92,7 +92,7 @@ def calculate_percent_change():
     # df = df.iloc[::-1]  # Reverse the order
 
     # Write the updated DataFrame to the same Excel file
-    with pd.ExcelWriter('output/CPI_Data.xlsx', engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
+    with pd.ExcelWriter('/home/ubuntu/airflow/Elip_Dashboard/output/CPI_Data.xlsx', engine='openpyxl', mode='a', if_sheet_exists='replace') as writer:
         df.to_excel(writer, sheet_name='percentChange')
         
 
@@ -108,7 +108,7 @@ def apply_weighted_transformation():
     - None
     """
     
-    df_percent_change = pd.read_excel('output/CPI_Data.xlsx', sheet_name='percentChange', index_col=0)# Load the DataFrame from the Excel file (Processed sheet)
+    df_percent_change = pd.read_excel('/home/ubuntu/airflow/Elip_Dashboard/output/CPI_Data.xlsx', sheet_name='percentChange', index_col=0)# Load the DataFrame from the Excel file (Processed sheet)
     item_codes_df = pd.read_csv(config.CPI_ItemCodes)# Load the DataFrame with item names and relative importance
 
     
@@ -123,7 +123,7 @@ def apply_weighted_transformation():
  
 
     # Save the weighted percent change DataFrame to a new sheet named 'Weighted Change'
-    with pd.ExcelWriter('output/CPI_Data.xlsx', engine='openpyxl', mode='a') as writer:
+    with pd.ExcelWriter('/home/ubuntu/airflow/Elip_Dashboard/output/CPI_Data.xlsx', engine='openpyxl', mode='a') as writer:
         df_cleaned.to_excel(writer, sheet_name='Weighted Change')
         
 
@@ -176,7 +176,7 @@ def run_cpi_scrapper():
   
 
     # Write processed data to Excel
-    df_processed.to_excel('output/CPI_Data.xlsx', sheet_name='Processed')
+    df_processed.to_excel('/home/ubuntu/airflow/Elip_Dashboard/output/CPI_Data.xlsx', sheet_name='Processed')
     
     print("Processed data saved to 'Processed' sheet in CPI_Data.xlsx.")
 
@@ -192,7 +192,7 @@ def run_cpi_scrapper():
     print("Weighted transformation successful.")
 
     
-    excel_to_sql("output/CPI_Data.xlsx")
+    excel_to_sql("/home/ubuntu/airflow/Elip_Dashboard/output/CPI_Data.xlsx")
     
     print("All functions executed successfully and weighted change uploaded to the database")
 

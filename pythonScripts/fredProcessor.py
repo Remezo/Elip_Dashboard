@@ -47,7 +47,7 @@ def excel_to_sql(excel_file):
  
 def run_fred_processor():
     # file_path_scrapper = "fred_scrapper_output.xlsx"
-    file_path_scrapper=  "output/fred_scrapper_output.xlsx"
+    file_path_scrapper=  "/home/ubuntu/airflow/Elip_Dashboard/output/fred_scrapper_output.xlsx"
 
   
 
@@ -55,7 +55,7 @@ def run_fred_processor():
     data_frames["Monthly"] = pd.read_excel(file_path_scrapper, sheet_name="Monthly", index_col=False)  # Replace with your actual Monthly data
     data_frames["Quarterly"] = pd.read_excel(file_path_scrapper, sheet_name="Quarterly", index_col=False)  # Replace with your actual Quarterly data
 
-    data_summary = read_data_summary("input/DataSummary.csv")
+    data_summary = read_data_summary("/home/ubuntu/airflow/Elip_Dashboard/input/DataSummary.csv")
     # print(data_summary)
 
 
@@ -67,7 +67,7 @@ def run_fred_processor():
     # test1.to_csv("test1.csv")
     
 
-    writer = pd.ExcelWriter("output/processed_data.xlsx", engine="xlsxwriter")
+    writer = pd.ExcelWriter("/home/ubuntu/airflow/Elip_Dashboard/output/processed_data.xlsx", engine="xlsxwriter")
 
 
     # frequency="Monthly"
@@ -99,7 +99,7 @@ def run_fred_processor():
 
     writer.close()
     
-    excel_to_sql('output/processed_data.xlsx')
+    excel_to_sql('/home/ubuntu/airflow/Elip_Dashboard/output/processed_data.xlsx')
     print("Successfully added processed data to the database")
 
 
