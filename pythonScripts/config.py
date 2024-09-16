@@ -9,5 +9,6 @@ INPUT_FOLDER = 'input/'
 PROCESSED_DATA = 'output/processed_data.csv'
 EXCEL_FILE="output/CPI Weighted.xlsm"
 EXCEL_TAB="processed_data"
-CPI_ItemCodes='input/CPIitemCodes.csv'
-Data_summary="input/DataSummary.csv"
+CPI_ItemCodes='/home/ubuntu/airflow/Elip_Dashboard/input/CPIitemCodes.csv'
+Data_summary="/home/ubuntu/airflow/Elip_Dashboard/input/DataSummary.csv"
+
