@@ -1,0 +1,21 @@
+FROM apache/airflow:2.8.1-python3.10
+
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt/airflow/app/output /opt/airflow/app/input /opt/airflow/app/pythonScripts \
+    && chown -R airflow:root /opt/airflow/app
+
+USER airflow
+
+COPY requirements-airflow.txt /tmp/requirements-airflow.txt
+RUN pip install --no-cache-dir -r /tmp/requirements-airflow.txt
+
+COPY --chown=airflow:root dags/ /opt/airflow/dags/
+COPY --chown=airflow:root pythonScripts/ /opt/airflow/app/pythonScripts/
+COPY --chown=airflow:root input/ /opt/airflow/app/input/
+
+ENV APP_BASE_DIR=/opt/airflow/app
