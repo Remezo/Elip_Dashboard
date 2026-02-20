@@ -124,12 +124,11 @@ services:
         condition: service_completed_successfully
 
   # ============================================
-  # Streamlit Dashboard
+  # FastAPI Backend
   # ============================================
-  streamlit:
+  backend:
     build:
-      context: .
-      dockerfile: Dockerfile.streamlit
+      context: ./backend
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
@@ -137,11 +136,25 @@ services:
       - POSTGRES_HOST=postgres
       - POSTGRES_PORT=5432
       - APP_BASE_DIR=/app
+    volumes:
+      - ./input:/app/input
     ports:
-      - "127.0.0.1:8501:8501"
+      - "127.0.0.1:8000:8000"
     depends_on:
       postgres:
         condition: service_healthy
+    restart: unless-stopped
+
+  # ============================================
+  # React Frontend (nginx)
+  # ============================================
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "127.0.0.1:8501:80"
+    depends_on:
+      - backend
     restart: unless-stopped
 
 volumes:

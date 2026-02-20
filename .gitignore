@@ -28,3 +28,9 @@ output/*.xls
 
 # Jupyter
 .ipynb_checkpoints/
+
+# Node.js / React
+node_modules/
+frontend/dist/
+frontend/.cache/
+npm-debug.log*
