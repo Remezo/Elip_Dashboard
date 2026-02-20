@@ -7,6 +7,13 @@ import plotly.graph_objects as go
 from sqlalchemy import create_engine
 from io import BytesIO
 
+st.set_page_config(
+    page_title="Ascentris Research",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
+
 
 def get_db_connection_string():
     user = os.environ.get("POSTGRES_USER", "ascentris")
@@ -139,11 +146,23 @@ def plot_graphs(filtered_df, processed_data_frames, fred_data_frames):
             secondary_y=True,
         )
 
-        fig.update_layout(title_text=f"{row['Name']}")
-        fig.update_xaxes(title_text="Year")
-        fig.update_yaxes(title_text=f"{row['Data']}", secondary_y=False)
-        fig.update_yaxes(title_text=frequency, secondary_y=True)
-        st.plotly_chart(fig)
+        fig.update_layout(
+            title=dict(text=row["Name"], font=dict(size=14)),
+            autosize=True,
+            margin=dict(l=20, r=20, t=40, b=20),
+            legend=dict(
+                orientation="h",
+                yanchor="bottom",
+                y=-0.3,
+                xanchor="center",
+                x=0.5,
+                font=dict(size=10),
+            ),
+        )
+        fig.update_xaxes(title_text="Year", title_font=dict(size=10))
+        fig.update_yaxes(title_text=f"{row['Data']}", title_font=dict(size=10), secondary_y=False)
+        fig.update_yaxes(title_text=frequency, title_font=dict(size=10), secondary_y=True)
+        st.plotly_chart(fig, use_container_width=True)
 
 
 def render_cpi_page(df, processed_data_frames):
@@ -164,9 +183,19 @@ def render_cpi_page(df, processed_data_frames):
     trace_data = bar_trace_data + [line_trace]
     layout = go.Layout(
         barmode="stack",
-        title="CPI Components",
-        xaxis=dict(title="Years"),
-        yaxis=dict(title="Weighted CPI"),
+        title=dict(text="CPI Components", font=dict(size=14)),
+        xaxis=dict(title="Years", title_font=dict(size=10)),
+        yaxis=dict(title="Weighted CPI", title_font=dict(size=10)),
+        autosize=True,
+        margin=dict(l=20, r=20, t=40, b=20),
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=-0.4,
+            xanchor="center",
+            x=0.5,
+            font=dict(size=10),
+        ),
     )
     fig = go.Figure(data=trace_data, layout=layout)
 
@@ -174,7 +203,7 @@ def render_cpi_page(df, processed_data_frames):
         fig.add_trace(
             go.Scatter(x=[None], y=[None], mode="markers", showlegend=False, name=category)
         )
-    st.plotly_chart(fig, height=800, width=800)
+    st.plotly_chart(fig, use_container_width=True)
 
 
 def render_signs_of_excess_page(df3, processed_data_frames, fred_data_frames):
