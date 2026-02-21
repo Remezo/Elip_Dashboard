@@ -1,11 +1,14 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import Plot from "react-plotly.js";
+import ChartModal from "./ChartModal";
 
 /**
  * CPIChart renders the stacked bar chart + "All items" line with Ascentris dark theme.
+ * Click to expand into full-screen modal.
  */
 export default function CPIChart({ data }) {
   const { dates, categories, all_items } = data;
+  const [expanded, setExpanded] = useState(false);
 
   const traces = useMemo(() => {
     const barTraces = Object.entries(categories).map(([name, values]) => ({
@@ -71,15 +74,36 @@ export default function CPIChart({ data }) {
   );
 
   return (
-    <div className="bg-brand-charcoal rounded-lg border border-brand-gray border-t-2 border-t-brand-gold p-2 md:p-4 hover:shadow-lg hover:shadow-black/30 transition-shadow">
-      <Plot
-        data={traces}
-        layout={layout}
-        config={config}
-        useResizeHandler
-        style={{ width: "100%", height: "100%" }}
-        className="w-full"
-      />
-    </div>
+    <>
+      <div
+        className="bg-brand-charcoal rounded-lg border border-brand-gray border-t-2 border-t-brand-gold p-2 md:p-4 hover:shadow-lg hover:shadow-black/30 transition-shadow cursor-pointer group relative"
+        onClick={() => setExpanded(true)}
+      >
+        {/* Expand hint icon */}
+        <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+          <div className="w-7 h-7 flex items-center justify-center rounded bg-brand-dark/80 text-brand-light">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
+            </svg>
+          </div>
+        </div>
+        <Plot
+          data={traces}
+          layout={layout}
+          config={config}
+          useResizeHandler
+          style={{ width: "100%", height: "100%" }}
+          className="w-full pointer-events-none"
+        />
+      </div>
+
+      {expanded && (
+        <ChartModal
+          data={traces}
+          layout={layout}
+          onClose={() => setExpanded(false)}
+        />
+      )}
+    </>
   );
 }
