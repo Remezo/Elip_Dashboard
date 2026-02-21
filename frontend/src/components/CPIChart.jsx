@@ -1,17 +1,6 @@
 import React, { useMemo } from "react";
 import Plot from "react-plotly.js";
 
-// Warm-toned palette for CPI stacked bars
-const CPI_COLORS = [
-  "#b89a3e", // Housing — dark gold
-  "#d4b85c", // Food — light gold
-  "#e8c56d", // Transportation — warm yellow
-  "#7c9885", // Education — muted sage
-  "#5b8a72", // Recreation — forest
-  "#8b6e4e", // Medical — bronze
-  "#a08060", // Other — tan
-];
-
 /**
  * CPIChart renders the stacked bar chart + "All items" line with Ascentris dark theme.
  */
@@ -19,12 +8,11 @@ export default function CPIChart({ data }) {
   const { dates, categories, all_items } = data;
 
   const traces = useMemo(() => {
-    const barTraces = Object.entries(categories).map(([name, values], i) => ({
+    const barTraces = Object.entries(categories).map(([name, values]) => ({
       type: "bar",
       x: dates,
       y: values,
       name,
-      marker: { color: CPI_COLORS[i % CPI_COLORS.length] },
     }));
 
     const lineTrace = {
@@ -33,8 +21,8 @@ export default function CPIChart({ data }) {
       x: dates,
       y: all_items,
       name: "All items",
-      line: { color: "#f5f5f5", width: 2.5 },
-      marker: { size: 4, color: "#f5f5f5" },
+      line: { color: "red" },
+      marker: { size: 4 },
     };
 
     return [...barTraces, lineTrace];

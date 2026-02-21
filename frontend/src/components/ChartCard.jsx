@@ -17,13 +17,13 @@ export default function ChartCard({ chart }) {
         x: recession_trace.x,
         y: recession_trace.y,
         name: "US Recession",
-        marker: { color: "rgba(220, 50, 50, 0.45)" },
+        marker: { color: "rgba(250, 0, 0, 0.7)" },
         yaxis: "y2",
         hoverinfo: "skip",
       });
     }
 
-    // Raw FRED data (primary y-axis) — gold
+    // Raw FRED data (primary y-axis)
     traces.push({
       type: "scatter",
       mode: "lines",
@@ -31,10 +31,10 @@ export default function ChartCard({ chart }) {
       y: raw_trace.y,
       name: data_key,
       yaxis: "y",
-      line: { color: "#c8a84e", width: 1.8 },
+      line: { width: 1.5 },
     });
 
-    // Processed data (secondary y-axis) — blue
+    // Processed data (secondary y-axis)
     if (processed_trace && processed_trace.x.length > 0) {
       traces.push({
         type: "scatter",
@@ -43,7 +43,7 @@ export default function ChartCard({ chart }) {
         y: processed_trace.y,
         name: processing || "Processed",
         yaxis: "y2",
-        line: { color: "#60a5fa", width: 1.8 },
+        line: { width: 1.5 },
       });
     }
 
