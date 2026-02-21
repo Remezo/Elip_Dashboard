@@ -2,27 +2,25 @@ import React, { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 
 const NAV_ITEMS = [
-  { path: "/cpi", label: "CPI", icon: "📈" },
+  { path: "/cpi", label: "CPI", shortLabel: "CPI", icon: "📈" },
   { path: "/signs-of-excess", label: "Signs of Excess", shortLabel: "Excess", icon: "⚠️" },
-  { path: "/operating-fundamentals", label: "Operating Fundamentals", shortLabel: "Fundamentals", icon: "🏭" },
+  { path: "/operating-fundamentals", label: "Operating Fundamentals", shortLabel: "Ops", icon: "🏭" },
   { path: "/yield-spreads", label: "Yield Spreads", shortLabel: "Yields", icon: "📊" },
   { path: "/global-growth", label: "Global Growth", shortLabel: "Global", icon: "🌍" },
-  { path: "/download", label: "Download", icon: "⬇️" },
+  { path: "/download", label: "Download", shortLabel: "Data", icon: "⬇️" },
 ];
 
 export default function Layout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
-  const currentPage = NAV_ITEMS.find((item) => item.path === location.pathname);
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-brand-black flex flex-col">
       {/* Top navbar - desktop */}
-      <header className="bg-white shadow-sm border-b border-gray-200 hidden md:block">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center h-14">
-            <h1 className="text-lg font-bold text-primary-700 mr-8 whitespace-nowrap">
+      <header className="bg-brand-charcoal border-b-2 border-brand-gold hidden md:block">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center h-16">
+            <h1 className="text-lg font-bold text-brand-gold mr-10 whitespace-nowrap tracking-widest uppercase">
               Ascentris Research
             </h1>
             <nav className="flex space-x-1">
@@ -31,10 +29,10 @@ export default function Layout({ children }) {
                   key={item.path}
                   to={item.path}
                   className={({ isActive }) =>
-                    `px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    `px-4 py-2 text-sm font-medium transition-all tracking-wider uppercase ${
                       isActive
-                        ? "bg-primary-100 text-primary-700"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                        ? "text-brand-gold border-b-2 border-brand-gold"
+                        : "text-brand-light hover:text-brand-white border-b-2 border-transparent"
                     }`
                   }
                 >
@@ -47,12 +45,14 @@ export default function Layout({ children }) {
       </header>
 
       {/* Mobile header */}
-      <header className="bg-white shadow-sm border-b border-gray-200 md:hidden">
-        <div className="flex items-center justify-between h-12 px-4">
-          <h1 className="text-base font-bold text-primary-700">Ascentris Research</h1>
+      <header className="bg-brand-charcoal border-b-2 border-brand-gold md:hidden">
+        <div className="flex items-center justify-between h-13 px-4 py-2">
+          <h1 className="text-base font-bold text-brand-gold tracking-widest uppercase">
+            Ascentris Research
+          </h1>
           <button
             onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-md text-gray-600 hover:bg-gray-100"
+            className="p-2 rounded-md text-brand-light hover:text-brand-gold hover:bg-brand-dark transition-colors"
             aria-label="Toggle navigation"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,17 +67,17 @@ export default function Layout({ children }) {
 
         {/* Mobile dropdown menu */}
         {sidebarOpen && (
-          <nav className="border-t border-gray-200 bg-white py-2 px-4 space-y-1">
+          <nav className="border-t border-brand-gray bg-brand-charcoal py-2 px-4 space-y-1">
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
-                  `block px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  `block px-3 py-2.5 rounded-md text-sm font-medium transition-colors tracking-wide uppercase ${
                     isActive
-                      ? "bg-primary-100 text-primary-700"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      ? "bg-brand-dark text-brand-gold border-l-4 border-brand-gold pl-2"
+                      : "text-brand-light hover:text-brand-white hover:bg-brand-dark"
                   }`
                 }
               >
@@ -94,21 +94,31 @@ export default function Layout({ children }) {
         {children}
       </main>
 
+      {/* Footer - desktop only */}
+      <footer className="hidden md:block bg-brand-charcoal border-t border-brand-gray">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <span className="text-brand-muted text-xs tracking-wider uppercase">
+            Ascentris Research {new Date().getFullYear()}
+          </span>
+          <div className="w-12 h-0.5 bg-brand-gold" />
+        </div>
+      </footer>
+
       {/* Bottom tab bar - mobile */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-brand-charcoal border-t-2 border-brand-gold shadow-lg z-50">
         <div className="flex justify-around items-center h-14">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}
               className={({ isActive }) =>
-                `flex flex-col items-center justify-center py-1 px-1 min-w-0 flex-1 ${
-                  isActive ? "text-primary-600" : "text-gray-400"
+                `flex flex-col items-center justify-center py-1 px-1 min-w-0 flex-1 transition-colors ${
+                  isActive ? "text-brand-gold" : "text-brand-muted"
                 }`
               }
             >
               <span className="text-lg leading-none">{item.icon}</span>
-              <span className="text-[10px] mt-0.5 truncate max-w-full">
+              <span className="text-[10px] mt-0.5 truncate max-w-full font-medium">
                 {item.shortLabel || item.label}
               </span>
             </NavLink>

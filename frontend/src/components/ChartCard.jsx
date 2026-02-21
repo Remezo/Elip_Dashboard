@@ -2,18 +2,7 @@ import React, { useMemo } from "react";
 import Plot from "react-plotly.js";
 
 /**
- * ChartCard renders a dual-axis Plotly chart matching the Streamlit dashboard.
- *
- * Props:
- *   chart: {
- *     name: string,
- *     data_key: string,
- *     frequency: string,
- *     processing: string | null,
- *     raw_trace: { x: string[], y: number[] },
- *     processed_trace: { x: string[], y: number[] },
- *     recession_trace: { x: string[], y: number[] },
- *   }
+ * ChartCard renders a dual-axis Plotly chart with Ascentris dark theme.
  */
 export default function ChartCard({ chart }) {
   const { name, data_key, frequency, processing, raw_trace, processed_trace, recession_trace } = chart;
@@ -28,13 +17,13 @@ export default function ChartCard({ chart }) {
         x: recession_trace.x,
         y: recession_trace.y,
         name: "US Recession",
-        marker: { color: "rgba(250, 0, 0, 0.7)" },
+        marker: { color: "rgba(220, 50, 50, 0.45)" },
         yaxis: "y2",
         hoverinfo: "skip",
       });
     }
 
-    // Raw FRED data (primary y-axis)
+    // Raw FRED data (primary y-axis) — gold
     traces.push({
       type: "scatter",
       mode: "lines",
@@ -42,10 +31,10 @@ export default function ChartCard({ chart }) {
       y: raw_trace.y,
       name: data_key,
       yaxis: "y",
-      line: { width: 1.5 },
+      line: { color: "#c8a84e", width: 1.8 },
     });
 
-    // Processed data (secondary y-axis)
+    // Processed data (secondary y-axis) — blue
     if (processed_trace && processed_trace.x.length > 0) {
       traces.push({
         type: "scatter",
@@ -54,7 +43,7 @@ export default function ChartCard({ chart }) {
         y: processed_trace.y,
         name: processing || "Processed",
         yaxis: "y2",
-        line: { width: 1.5 },
+        line: { color: "#60a5fa", width: 1.8 },
       });
     }
 
@@ -63,7 +52,7 @@ export default function ChartCard({ chart }) {
 
   const layout = useMemo(
     () => ({
-      title: { text: name, font: { size: 14 } },
+      title: { text: name, font: { size: 13, color: "#c8a84e" } },
       autosize: true,
       margin: { l: 50, r: 50, t: 40, b: 30 },
       legend: {
@@ -72,23 +61,32 @@ export default function ChartCard({ chart }) {
         y: -0.15,
         xanchor: "center",
         x: 0.5,
-        font: { size: 10 },
+        font: { size: 10, color: "#a0a0a0" },
       },
       xaxis: {
-        title: { text: "Year", font: { size: 10 } },
+        title: { text: "Year", font: { size: 10, color: "#a0a0a0" } },
+        tickfont: { color: "#6b6b6b", size: 9 },
+        gridcolor: "#3a3a3a",
+        zerolinecolor: "#4a4a4a",
       },
       yaxis: {
-        title: { text: data_key, font: { size: 10 } },
+        title: { text: data_key, font: { size: 10, color: "#a0a0a0" } },
         side: "left",
+        tickfont: { color: "#6b6b6b", size: 9 },
+        gridcolor: "#3a3a3a",
+        zerolinecolor: "#4a4a4a",
       },
       yaxis2: {
-        title: { text: frequency, font: { size: 10 } },
+        title: { text: frequency, font: { size: 10, color: "#a0a0a0" } },
         side: "right",
         overlaying: "y",
+        tickfont: { color: "#6b6b6b", size: 9 },
+        gridcolor: "#3a3a3a",
+        zerolinecolor: "#4a4a4a",
       },
       hovermode: "x unified",
-      paper_bgcolor: "white",
-      plot_bgcolor: "white",
+      paper_bgcolor: "#2d2d2d",
+      plot_bgcolor: "#2d2d2d",
     }),
     [name, data_key, frequency]
   );
@@ -103,7 +101,7 @@ export default function ChartCard({ chart }) {
   );
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-2 md:p-4 mb-4">
+    <div className="bg-brand-charcoal rounded-lg border border-brand-gray border-t-2 border-t-brand-gold p-2 md:p-4 mb-4 hover:shadow-lg hover:shadow-black/30 transition-shadow">
       <Plot
         data={data}
         layout={layout}

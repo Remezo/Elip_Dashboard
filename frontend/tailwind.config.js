@@ -4,17 +4,18 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
+        // Ascentris brand colors
+        brand: {
+          black: "#1a1a1a",
+          charcoal: "#2d2d2d",
+          dark: "#3a3a3a",
+          gray: "#4a4a4a",
+          muted: "#6b6b6b",
+          light: "#a0a0a0",
+          gold: "#c8a84e",
+          "gold-light": "#d4b85c",
+          "gold-dark": "#b89a3e",
+          white: "#f5f5f5",
         },
       },
     },

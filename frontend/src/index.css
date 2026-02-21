@@ -7,7 +7,7 @@
     -webkit-tap-highlight-color: transparent;
   }
   body {
-    @apply text-gray-800 antialiased;
+    @apply bg-brand-black text-brand-white antialiased;
   }
 }
 
@@ -31,4 +31,19 @@
   opacity: 1;
   transform: translateY(0);
   transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+/* Custom scrollbar for dark theme */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+::-webkit-scrollbar-thumb {
+  background: #4a4a4a;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6b6b6b;
 }

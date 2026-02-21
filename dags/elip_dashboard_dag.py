@@ -37,7 +37,7 @@ with DAG(
     dag_id="elip_dashboard_etl",
     default_args=default_args,
     description="Pull FRED/BLS CPI data, process, and load to PostgreSQL",
-    schedule_interval="0 11 * * *",  # 6am EST = 11am UTC
+    schedule_interval="0 5 * * *",  # 12am EST = 5am UTC
     catchup=False,
     tags=["elip", "etl", "fred", "cpi"],
 ) as dag:
